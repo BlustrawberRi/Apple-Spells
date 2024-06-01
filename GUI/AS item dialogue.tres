@@ -1,0 +1,13 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://gi6bu7fvmtlr"]
+
+[ext_resource type="FontFile" uid="uid://c5211l60p0570" path="res://assets/ui/XPAIDERP.TTF" id="1_0m3l5"]
+
+[resource]
+default_font = ExtResource("1_0m3l5")
+default_font_size = 6
+MarginContainer/constants/margin_bottom = 4
+MarginContainer/constants/margin_left = 4
+MarginContainer/constants/margin_right = 4
+MarginContainer/constants/margin_top = 4
+RichTextLabel/colors/default_color = Color(0.121569, 0.160784, 0.180392, 1)
+RichTextLabel/constants/line_separation = 1
