@@ -26,6 +26,9 @@ public partial class PlayerMovement : CharacterBody2D
 
     [Export] public AnimationTree AnimTree {get;set;}
 
+	[Signal]
+    public delegate void MovedEventHandler(Vector2 velocity);
+
 	public override void _Ready()
 	{
 	}
@@ -88,6 +91,9 @@ public partial class PlayerMovement : CharacterBody2D
 		AnimTree.Set("parameters/Walk/WalkAnimation/blend_position", velocity);
 		IsIdle = false;
 		//animTree.
+
+		if (velocity.Length() > 0)
+			EmitSignal(SignalName.Moved, velocity);
 	}
 
 	/// <summary>

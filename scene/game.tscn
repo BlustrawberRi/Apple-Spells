@@ -538,8 +538,10 @@ drag_vertical_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[node name="InteractionManager" type="Area2D" parent="MC"]
+[node name="InteractionManager" type="Area2D" parent="MC" node_paths=PackedStringArray("InteractablesInRange")]
+position = Vector2(0, 14.085)
 script = ExtResource("7_ayg7c")
+InteractablesInRange = []
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="MC/InteractionManager"]
 position = Vector2(0, -6)
@@ -597,6 +599,7 @@ how my brain becomes numb[/wave]"
 
 [node name="Sack" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(437, -16)
+scale = Vector2(1, 0.992244)
 ItemTexture = ExtResource("11_bceq8")
 
 [node name="Pot 3" parent="Items" instance=ExtResource("7_5x76a")]
@@ -608,6 +611,7 @@ position = Vector2(211, -23)
 ItemTexture = ExtResource("10_8hiul")
 
 [node name="Plant" parent="Items/Pot 2" instance=ExtResource("15_j3b6a")]
+disable_mode = 1
 
 [node name="Pot 1" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(53, -6)
@@ -662,6 +666,5 @@ bus = &"AFX"
 position = Vector2(93, 22)
 ItemTexture = ExtResource("11_bceq8")
 
+[connection signal="Moved" from="MC" to="MC/InteractionManager" method="OnMcMoved"]
 [connection signal="ItemInteraction" from="MC/InteractionManager" to="GUI/ItemDialogue" method="OnItemInteraction"]
-[connection signal="body_entered" from="MC/InteractionManager" to="MC/InteractionManager" method="OnBodyEntered"]
-[connection signal="body_exited" from="MC/InteractionManager" to="MC/InteractionManager" method="OnBodyExit"]

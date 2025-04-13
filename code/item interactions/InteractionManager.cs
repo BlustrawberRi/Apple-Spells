@@ -1,11 +1,18 @@
 using Godot;
+using Godot.NativeInterop;
 using System;
+using System.Collections.Generic;
 
+[Tool]
 public partial class InteractionManager : Area2D
 {
 
     [Export]
     private Node2D ActiveItem;
+
+    [Export]
+    private Godot.Collections.Array<Node2D> InteractablesInRange;
+
     //[Signal]
     //public delegate void ItemCollisionEventHandler(StaticBody2D item);
     [Signal]
@@ -17,6 +24,8 @@ public partial class InteractionManager : Area2D
 
     public override void _Ready() 
     {
+        BodyEntered += OnBodyEntered;
+        BodyExited += OnBodyExit;
 
         //BodyEntered += OnBodyEntered; // I dont need this if I connected it in editor
     }
@@ -31,29 +40,90 @@ public partial class InteractionManager : Area2D
         }
     }
 
+    public void UpdateActiveInteractable()
+    {
+        if (InteractablesInRange.Count == 0) return;
+
+        ActiveItem = GetInteractableLookedAt();
+        listenToInput = (ActiveItem is null)? false : true;
+
+        GD.PrintRich("Active: [img]"+ (ActiveItem as Interactable).ItemTexture?.ResourcePath +"[/img] "+ ActiveItem.Name);
+    }
+
     private void OnBodyEntered(Node2D body)
     {
-        ActiveItem = body;
+        if (body is not Interactable) return;
 
-        if (body is Plant) 
+        InteractablesInRange.Add(body);
+        UpdateActiveInteractable();
+        //ActiveItem = GetBodyLookedAt();
+
+        /*if (body is Plant) 
         {
-            GD.PrintRich("Collided with: [img]"+ (ActiveItem as Plant).PlantSprite?.Texture?.ResourcePath +"[/img] "+ (body as Plant).PlantType + " | Level " + (body as Plant).CurrentGrowthPhase); 
+            listenToInput = true;
+            GD.PrintRich("Collided with: [img]"+ (body as Plant).PlantSprite?.Texture?.ResourcePath +"[/img] "+ (body as Plant).PlantType + " | Level " + (body as Plant).CurrentGrowthPhase); 
         }
 
-        if (body is Interactable)
-        {
+        //if (body is Interactable)
+        //{
             //EmitSignal(SignalName.ItemCollision, body as StaticBody2D);
             //if (body is not Interactable) return;
 
             //GetInteractableFeatures((StaticBody2D)body);
             listenToInput = true;
-            GD.PrintRich("Collided with: [img]"+ (ActiveItem as Interactable).ItemTexture?.ResourcePath+"[/img] "+ body.Name); 
-        }
+            GD.PrintRich("Collided with: [img]"+ (body as Interactable).ItemTexture?.ResourcePath+"[/img] "+ body.Name); 
+        //}*/
     }
 
     private void OnBodyExit(Node2D body)
     {
-        listenToInput = false;
+        if (!InteractablesInRange.Contains(body))
+            return;
+
+        InteractablesInRange.Remove(body);
+        UpdateActiveInteractable();
+        /*if (ActiveItem == body) {
+            ActiveItem = null;
+            listenToInput = false;
+        }*/
+
+    }
+
+    /// <summary>
+    /// The Character moved.
+    /// </summary>
+    private void OnMcMoved(Vector2 velocity)
+    {
+        //todo: actually just update every 5 frames or so...
+        UpdateActiveInteractable();
+    }
+
+    /// <summary>
+    /// Returns the collided interactable with the smallest distance to the center of the InteractionManager area out of all collided interactables.
+    /// </summary>
+    /// <returns></returns>
+    private Node2D GetInteractableLookedAt()
+    {
+        string interactableList = "[";
+        foreach(var item in InteractablesInRange)
+            {
+                interactableList +="[img]"+(item as Interactable).TexturePath+"[/img]" 
+                    + item.Name + " ";
+            };
+        GD.PrintRich(interactableList + "]");
+
+        if (InteractablesInRange.Count == 0) return null;
+
+        Node2D closestThing = InteractablesInRange[0];
+        float distanceToThing = closestThing.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+        foreach(Node2D i in InteractablesInRange) {
+            float distanceToI = i.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+            if (distanceToI < distanceToThing) {
+                closestThing = i;
+                distanceToThing = distanceToI;
+            }
+        }
+        return closestThing;
     }
 
 

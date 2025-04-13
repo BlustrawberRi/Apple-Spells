@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Reflection.Metadata.Ecma335;
 
 [Tool]
 /// <summary>
@@ -21,6 +22,13 @@ public partial class Interactable : StaticBody2D
 			TextureContainer?.Set("texture", value);
 		}
 	}
+	public string TexturePath 
+	{
+		get 
+		{
+			return ItemTexture?.ResourcePath;
+		}
+	}
 	private Texture _itemTexture;
 	[Export(PropertyHint.MultilineText)]
 	public String ItemDescription;
@@ -37,4 +45,5 @@ public partial class Interactable : StaticBody2D
     {
         
     }
+	
 }
