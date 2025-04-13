@@ -5,9 +5,9 @@ public partial class InteractionManager : Area2D
 {
 
     [Export]
-    private Interactable ActiveItem;
-    [Signal]
-    public delegate void ItemCollisionEventHandler(StaticBody2D item);
+    private Node2D ActiveItem;
+    //[Signal]
+    //public delegate void ItemCollisionEventHandler(StaticBody2D item);
     [Signal]
     public delegate void ItemInteractionEventHandler(Interactable item);
 
@@ -33,33 +33,28 @@ public partial class InteractionManager : Area2D
 
     private void OnBodyEntered(Node2D body)
     {
-        if(body is StaticBody2D)
+        ActiveItem = body;
+
+        if (body is Plant) 
         {
-            EmitSignal(SignalName.ItemCollision, body as StaticBody2D);
-            if (body is not Interactable) return;
+            GD.PrintRich("Collided with: [img]"+ (ActiveItem as Plant).PlantSprite?.Texture?.ResourcePath +"[/img] "+ (body as Plant).PlantType + " | Level " + (body as Plant).CurrentGrowthPhase); 
+        }
+
+        if (body is Interactable)
+        {
+            //EmitSignal(SignalName.ItemCollision, body as StaticBody2D);
+            //if (body is not Interactable) return;
 
             //GetInteractableFeatures((StaticBody2D)body);
-            ActiveItem = body as Interactable;
             listenToInput = true;
-            GD.PrintRich("Collided with: [img]"+ActiveItem.ItemTexture?.ResourcePath+"[/img] "+ body.Name); 
+            GD.PrintRich("Collided with: [img]"+ (ActiveItem as Interactable).ItemTexture?.ResourcePath+"[/img] "+ body.Name); 
         }
     }
+
     private void OnBodyExit(Node2D body)
     {
         listenToInput = false;
     }
 
-
-    private void GetInteractableFeatures(Interactable body)
-    {
-        //Variant variant = body.GetMeta("text");
-        //ItemText = variant.AsString();
-        //ItemText = (body as Interactable).ItemDescription;
-
-        GD.PrintRich("Collided with: [img]"+ActiveItem.ItemTexture.ResourcePath+"[/img] "+ body.Name); 
-        listenToInput = true;
-        
-
-    }
 
 }

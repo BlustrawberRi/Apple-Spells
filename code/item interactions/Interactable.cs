@@ -18,10 +18,7 @@ public partial class Interactable : StaticBody2D
 		set
 		{
 			_itemTexture = value;
-			if (TextureContainer != null)
-			{
-				TextureContainer.Set("texture", value);
-			}
+			TextureContainer?.Set("texture", value);
 		}
 	}
 	private Texture _itemTexture;
@@ -33,7 +30,8 @@ public partial class Interactable : StaticBody2D
     public override void _Ready()
     {
 		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
-		ItemTexture = ItemTexture; //initialize the set Texture
+		TextureContainer?.Set("texture", ItemTexture);
+		//ItemTexture = ItemTexture; //initialize the set Texture
     }
     public override void _Process(double delta)
     {

@@ -61,12 +61,12 @@ public partial class PlayerMovement : CharacterBody2D
         if (Input.IsActionPressed("Run"))
 		{
             Velocity = Velocity * runningSpeed;
-			AnimTree.Set("parameters/Walk2/WalkSpeed/scale", 1.0f);
+			AnimTree.Set("parameters/Walk/WalkSpeed/scale", 1.0f);
 		}
         else
         {    
 			Velocity = Velocity * walkingSpeed;
-			AnimTree.Set("parameters/Walk2/WalkSpeed/scale", 0.5f);
+			AnimTree.Set("parameters/Walk/WalkSpeed/scale", 0.5f);
 		}
     }
 
@@ -84,8 +84,8 @@ public partial class PlayerMovement : CharacterBody2D
 
 		velocity.Y = velocity.Y*-1; //todo animation is flipped
 		
-		AnimTree.Set("parameters/Idle/blend_position", velocity);
-		AnimTree.Set("parameters/Walk2/WalkAnimation/blend_position", velocity);
+		AnimTree.Set("parameters/Idle/IdleAnimation/blend_position", velocity);
+		AnimTree.Set("parameters/Walk/WalkAnimation/blend_position", velocity);
 		IsIdle = false;
 		//animTree.
 	}

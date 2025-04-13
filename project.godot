@@ -37,6 +37,8 @@ project/assembly_name="Apple Spells"
 
 [editor]
 
+naming/default_signal_callback_name="On{NodeName}{SignalName}"
+naming/default_signal_callback_to_self_name="On{SignalName}"
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 

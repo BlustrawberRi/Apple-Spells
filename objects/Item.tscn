@@ -18,3 +18,5 @@ texture = ExtResource("2_028wu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_opfgc")
+
+[node name="Interactable" type="Node" parent="."]
