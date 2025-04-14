@@ -8,7 +8,7 @@ public partial class InteractionManager : Area2D
 {
 
     [Export]
-    private Node2D ActiveItem;
+    private Interactable ActiveItem;
 
     [Export]
     private Godot.Collections.Array<Node2D> InteractablesInRange;
@@ -44,8 +44,15 @@ public partial class InteractionManager : Area2D
     {
         if (InteractablesInRange.Count == 0) return;
 
-        ActiveItem = GetInteractableLookedAt();
+        Interactable newActive = GetInteractableLookedAt();
         listenToInput = (ActiveItem is null)? false : true;
+
+        if(newActive != ActiveItem) 
+        {
+            newActive?.Highlight(true);
+            ActiveItem?.Highlight(false);        
+            ActiveItem = newActive;
+        }
 
         GD.PrintRich("Active: [img]"+ (ActiveItem as Interactable).ItemTexture?.ResourcePath +"[/img] "+ ActiveItem.Name);
     }
@@ -79,14 +86,8 @@ public partial class InteractionManager : Area2D
     {
         if (!InteractablesInRange.Contains(body))
             return;
-
         InteractablesInRange.Remove(body);
         UpdateActiveInteractable();
-        /*if (ActiveItem == body) {
-            ActiveItem = null;
-            listenToInput = false;
-        }*/
-
     }
 
     /// <summary>
@@ -102,7 +103,7 @@ public partial class InteractionManager : Area2D
     /// Returns the collided interactable with the smallest distance to the center of the InteractionManager area out of all collided interactables.
     /// </summary>
     /// <returns></returns>
-    private Node2D GetInteractableLookedAt()
+    private Interactable GetInteractableLookedAt()
     {
         string interactableList = "[";
         foreach(var item in InteractablesInRange)
@@ -114,16 +115,18 @@ public partial class InteractionManager : Area2D
 
         if (InteractablesInRange.Count == 0) return null;
 
-        Node2D closestThing = InteractablesInRange[0];
-        float distanceToThing = closestThing.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+        Interactable closestThing = null;
+        float distanceToThing = 0;
         foreach(Node2D i in InteractablesInRange) {
-            float distanceToI = i.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
-            if (distanceToI < distanceToThing) {
-                closestThing = i;
+            if (i is not Interactable) continue;
+            float distanceToI = 1/i.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+            if (distanceToI > distanceToThing) {
+                closestThing = i as Interactable;
                 distanceToThing = distanceToI;
             }
         }
-        return closestThing;
+
+        return closestThing ;
     }
 
 

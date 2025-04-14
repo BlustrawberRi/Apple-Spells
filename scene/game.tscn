@@ -635,6 +635,10 @@ If I had plants...
 
 ... [fade length=44]And could pick up the watering can...[/fade]"
 
+[node name="Item2" parent="Items" instance=ExtResource("7_5x76a")]
+position = Vector2(93, 22)
+ItemTexture = ExtResource("11_bceq8")
+
 [node name="2021-07GardenShearSmall" type="Sprite2D" parent="Items"]
 position = Vector2(242, 54)
 texture = ExtResource("20_6acik")
@@ -661,10 +665,6 @@ volume_db = -20.56
 pitch_scale = 0.85
 autoplay = true
 bus = &"AFX"
-
-[node name="Item" parent="." instance=ExtResource("7_5x76a")]
-position = Vector2(93, 22)
-ItemTexture = ExtResource("11_bceq8")
 
 [connection signal="Moved" from="MC" to="MC/InteractionManager" method="OnMcMoved"]
 [connection signal="ItemInteraction" from="MC/InteractionManager" to="GUI/ItemDialogue" method="OnItemInteraction"]
