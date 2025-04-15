@@ -13,8 +13,6 @@ public partial class InteractionManager : Area2D
     [Export]
     private Godot.Collections.Array<Node2D> InteractablesInRange;
 
-    //[Signal]
-    //public delegate void ItemCollisionEventHandler(StaticBody2D item);
     [Signal]
     public delegate void ItemInteractionEventHandler(Interactable item);
 
@@ -26,8 +24,6 @@ public partial class InteractionManager : Area2D
     {
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExit;
-
-        //BodyEntered += OnBodyEntered; // I dont need this if I connected it in editor
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -40,21 +36,23 @@ public partial class InteractionManager : Area2D
         }
     }
 
-    public void UpdateActiveInteractable()
+    public bool UpdateActiveInteractable() 
     {
-        if (InteractablesInRange.Count == 0) return;
-
-        Interactable newActive = GetInteractableLookedAt();
-        listenToInput = (ActiveItem is null)? false : true;
+        Interactable newActive = null;
+        if (InteractablesInRange.Count != 0) 
+            newActive = GetLookedAtInteractable();
 
         if(newActive != ActiveItem) 
         {
             newActive?.Highlight(true);
             ActiveItem?.Highlight(false);        
             ActiveItem = newActive;
-        }
+            listenToInput = (ActiveItem is null)? false : true;
 
-        GD.PrintRich("Active: [img]"+ (ActiveItem as Interactable).ItemTexture?.ResourcePath +"[/img] "+ ActiveItem.Name);
+            _PrintInteractables();
+            return true;
+        }
+        return false;
     }
 
     private void OnBodyEntered(Node2D body)
@@ -62,24 +60,8 @@ public partial class InteractionManager : Area2D
         if (body is not Interactable) return;
 
         InteractablesInRange.Add(body);
-        UpdateActiveInteractable();
-        //ActiveItem = GetBodyLookedAt();
-
-        /*if (body is Plant) 
-        {
-            listenToInput = true;
-            GD.PrintRich("Collided with: [img]"+ (body as Plant).PlantSprite?.Texture?.ResourcePath +"[/img] "+ (body as Plant).PlantType + " | Level " + (body as Plant).CurrentGrowthPhase); 
-        }
-
-        //if (body is Interactable)
-        //{
-            //EmitSignal(SignalName.ItemCollision, body as StaticBody2D);
-            //if (body is not Interactable) return;
-
-            //GetInteractableFeatures((StaticBody2D)body);
-            listenToInput = true;
-            GD.PrintRich("Collided with: [img]"+ (body as Interactable).ItemTexture?.ResourcePath+"[/img] "+ body.Name); 
-        //}*/
+        bool changed = UpdateActiveInteractable();
+        if (!changed) _PrintInteractables();
     }
 
     private void OnBodyExit(Node2D body)
@@ -87,7 +69,8 @@ public partial class InteractionManager : Area2D
         if (!InteractablesInRange.Contains(body))
             return;
         InteractablesInRange.Remove(body);
-        UpdateActiveInteractable();
+        bool changed = UpdateActiveInteractable();
+        if (!changed) _PrintInteractables();
     }
 
     /// <summary>
@@ -95,6 +78,7 @@ public partial class InteractionManager : Area2D
     /// </summary>
     private void OnMcMoved(Vector2 velocity)
     {
+        Rotation = -(velocity.Angle() + (float)Math.PI/(2.0f));
         //todo: actually just update every 5 frames or so...
         UpdateActiveInteractable();
     }
@@ -103,16 +87,8 @@ public partial class InteractionManager : Area2D
     /// Returns the collided interactable with the smallest distance to the center of the InteractionManager area out of all collided interactables.
     /// </summary>
     /// <returns></returns>
-    private Interactable GetInteractableLookedAt()
+    private Interactable GetLookedAtInteractable()
     {
-        string interactableList = "[";
-        foreach(var item in InteractablesInRange)
-            {
-                interactableList +="[img]"+(item as Interactable).TexturePath+"[/img]" 
-                    + item.Name + " ";
-            };
-        GD.PrintRich(interactableList + "]");
-
         if (InteractablesInRange.Count == 0) return null;
 
         Interactable closestThing = null;
@@ -129,5 +105,19 @@ public partial class InteractionManager : Area2D
         return closestThing ;
     }
 
+    private void _PrintInteractables() {
+        string interactableList = "[";
+        foreach (var item in InteractablesInRange)
+        {  
+            if (item == ActiveItem)
+                interactableList += "[u]";
 
+            interactableList += "[img]" + (item as Interactable).TexturePath + "[/img]"
+                + item.Name + " ";
+
+            if (item == ActiveItem)
+                interactableList += "[/u]";
+        };
+        GD.PrintRich(interactableList + "]");
+    }  
 }

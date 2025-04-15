@@ -499,7 +499,7 @@ a = Vector2(-18, -1)
 b = Vector2(16, -1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s05c8"]
-size = Vector2(33, 27)
+size = Vector2(22, 27)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_giga3"]
 size = Vector2(20, 23)
@@ -539,12 +539,12 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 
 [node name="InteractionManager" type="Area2D" parent="MC" node_paths=PackedStringArray("InteractablesInRange")]
-position = Vector2(0, 14.085)
+position = Vector2(0, -10)
 script = ExtResource("7_ayg7c")
 InteractablesInRange = []
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="MC/InteractionManager"]
-position = Vector2(0, -6)
+position = Vector2(0, 15)
 shape = SubResource("RectangleShape2D_s05c8")
 debug_color = Color(0.625262, 0.398864, 0.897547, 0.42)
 

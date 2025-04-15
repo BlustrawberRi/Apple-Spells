@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Dynamic;
 using System.Threading;
+using System.Threading.Tasks;
 
 public partial class ItemDialogue : MarginContainer
 {
@@ -20,7 +21,8 @@ public partial class ItemDialogue : MarginContainer
 			TextLabel.Text = value;
 		}
 	}
-	private String _text;
+
+    private String _text;
 
 	[Export]
 	public Texture Texture 
@@ -36,7 +38,10 @@ public partial class ItemDialogue : MarginContainer
 			TextureContainer.Set("texture", value);
 		}
 	}
-	private Texture _texture;
+	private Texture _texture; //todo: show the name of the object somewhere
+
+	[Export]
+    public StringName InteractableName;
 
 	private RichTextLabel TextLabel {get; set;}
 	private TextureRect TextureContainer {get; set;}
@@ -63,62 +68,58 @@ public partial class ItemDialogue : MarginContainer
     }
 	
 
-	//this is for UI Input (before _unhandled_input())
-    public override void _Input(InputEvent @event)
-    {	
-		if (!Visible) return;
-		
-        if (@event.IsActionReleased("Interact"))
+    private async Task OpenDialogue()
+    {
+		if (Visible) return;
+
+        bool hasText = (Text is not "") && (Text is not null);
+        if (!hasText)
         {
-            int visibleLineCount = TextLabel.GetVisibleLineCount();
-            int lineCount = TextLabel.GetLineCount();
+            GD.PrintRich("[color=#bb9922]No interaction, because Item Description is missing[/color] for " + InteractableName);
+            return;
+        }
 
-            if (!ScrollToNextLines(visibleLineCount, lineCount))
-			{
-				GetNode<AudioStreamPlayer>("DialogueCloseAudio")?.Play();
-            	Visible = false;
-			}
+        Visible = true;
 
-            this.GetViewport().SetInputAsHandled();
+        //waiting for dialogue to be drawn and processed, so the visible line count is correct
+        await ToSignal(TextLabel, Godot.RichTextLabel.SignalName.Draw);
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+
+        GetNode<AudioStreamPlayer>("DialogueOpenAudio")?.Play();
+
+        int visibleLineCount = TextLabel.GetVisibleLineCount();
+        int totalLineCount = TextLabel.GetLineCount();
+
+        if (visibleLineCount == totalLineCount)
+        {
+            SetIndicatorIcon(CLOSE_INDICATOR);
+        }
+        else
+        {
+            SetIndicatorIcon(CONTINUE_INDICATOR);
+            AddEmptyLinesToEnd(visibleLineCount, totalLineCount);
         }
     }
 
+    public void Close()
+    {
+		if (!Visible) return;
+
+        GetNode<AudioStreamPlayer>("DialogueCloseAudio")?.Play();
+        Visible = false;
+    }
+
     private async void OnItemInteraction(Interactable item)
-	{
-		Texture = item.ItemTexture;
-		Text = item.ItemDescription;
+    {
+        Texture = item.ItemTexture;
+        Text = item.ItemDescription;
+        InteractableName = item.Name;
 
-		bool hasText = (Text is not "") && (Text is not null);
-		if (!hasText) 
-		{
-			GD.PrintRich("[color=#bb9922]No interaction, because Item Description is missing[/color] for " + item.Name);
-			return;
-		}
+        await OpenDialogue();
 
-		Visible = true;
+        _PrintDialogueText();
+    }
 
-		//waiting for dialogue to be drawn and processed, so the visible line count is correct
-		await ToSignal(TextLabel, Godot.RichTextLabel.SignalName.Draw);
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-
-		GetNode<AudioStreamPlayer>("DialogueOpenAudio")?.Play();
-
-		int visibleLineCount = TextLabel.GetVisibleLineCount();
-		int totalLineCount = TextLabel.GetLineCount();
-
-		if (visibleLineCount == totalLineCount)
-		{
-			SetIndicatorIcon(CLOSE_INDICATOR);
-		} else
-		{
-			SetIndicatorIcon(CONTINUE_INDICATOR);
-			AddEmptyLinesToEnd(visibleLineCount, totalLineCount);
-		}
-
-
-		GD.Print("There are "+TextLabel.GetVisibleLineCount()+"/"+TextLabel.GetLineCount()+" Lines visible in the dialogue");
-		GD.PrintRich("[img]"+Texture?.ResourcePath+"[/img] "+ Text); // show this on interaction
-	}
 
     private void SetIndicatorIcon(bool continueIndicator)
     {
@@ -164,13 +165,36 @@ public partial class ItemDialogue : MarginContainer
 	/// <param name="totalLineCount">The total number of lines that are to be shown in the dialogue.</param>
     private void AddEmptyLinesToEnd(int visibleLineCount, int totalLineCount)
     {
-		for (int rest = totalLineCount % visibleLineCount; rest < visibleLineCount; rest++)
-		{
-			Text += "\n ";
-		}
+        int linesTooMany = totalLineCount % visibleLineCount;
+
+        Text += new string('\n', (visibleLineCount - linesTooMany) % visibleLineCount);
     }
 
 
+    //this is for UI Input (before _unhandled_input())
+    public override void _Input(InputEvent @event)
+    {
+        if (!Visible) return;
+
+        if (@event.IsActionReleased("Interact"))
+        {
+            int visibleLineCount = TextLabel.GetVisibleLineCount();
+            int lineCount = TextLabel.GetLineCount();
+
+            if (!ScrollToNextLines(visibleLineCount, lineCount))
+            {
+                Close();
+            }
+
+            this.GetViewport().SetInputAsHandled();
+        }
+    }
+
+    private void _PrintDialogueText()
+    {
+        GD.Print("There are " + TextLabel.GetVisibleLineCount() + "/" + TextLabel.GetLineCount() + " Lines visible in the dialogue");
+        GD.PrintRich("[img]" + Texture?.ResourcePath + "[/img] " + Text); // show this on interaction
+    }
 
 	
 }

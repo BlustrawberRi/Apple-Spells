@@ -182,12 +182,18 @@ size_flags_horizontal = 3
 theme = ExtResource("1_adxrh")
 theme_override_colors/default_color = Color(0.121569, 0.160784, 0.180392, 1)
 bbcode_enabled = true
-text = "I want more text to show up
-in [shake rate=20.0 level=5 connected=1]{text}[/shake]
-maybe more
-one more. Actually i think its too little...
-[hint={There is one more line actually}]line 5[/hint]
-hlk"
+text = "         [u]Todo List[/u]
+[ul][s]make camera follow the player[/s]
+[s]finding out how GUI works[/s]
+[s]create an item dialogue[/s]
+[s]use a theme file[/s]
+[s]create a object with collider in scene[/s]
+[s]read metadata from items[/s]
+[s]change text and icon in the dialogue to match item[/s]
+[s]scroll thru long text[/s]
+[s]fix issue where you see the last few lines again[/s]
+[s]animate text indicator[/s]
+[s]add music[/s]"
 scroll_active = false
 drag_and_drop_selection_enabled = false
 

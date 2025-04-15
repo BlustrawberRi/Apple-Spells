@@ -52,6 +52,7 @@ public partial class Interactable : StaticBody2D
         
     }
 
+// todo: put this in the interaction Manager
 	public void Highlight(bool on) 
 	{
 		if(on)		
