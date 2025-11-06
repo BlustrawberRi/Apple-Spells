@@ -51,6 +51,10 @@ public partial class Interactable : StaticBody2D
     {
         
     }
+	
+	// todo: make Interactable an Area2D
+	//public override onBodyEntered
+
 
 // todo: put this in the interaction Manager
 	public void Highlight(bool on) 

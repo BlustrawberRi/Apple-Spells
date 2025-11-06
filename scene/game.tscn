@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dp73owrke1sb5" path="res://assets/tilesets/floor_trampled.png" id="4_ykqrj"]
 [ext_resource type="Texture2D" uid="uid://b43kd47knlv3m" path="res://assets/tilesets/floor_light_wood.png" id="5_v78t2"]
 [ext_resource type="PackedScene" uid="uid://b17rx8gwci716" path="res://objects/Item.tscn" id="7_5x76a"]
-[ext_resource type="PackedScene" uid="uid://b7arsmo7isgiv" path="res://GUI/item dialogue.tscn" id="7_84cgy"]
 [ext_resource type="Script" path="res://code/item interactions/InteractionManager.cs" id="7_ayg7c"]
 [ext_resource type="Texture2D" uid="uid://cvf54lcfh4qy3" path="res://assets/objects/2021-07 note plant.png" id="8_cc0ej"]
 [ext_resource type="Texture2D" uid="uid://b0sgaejjcc344" path="res://assets/objects/2021-07 bed.png" id="9_6noq5"]
@@ -18,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bvffriaa6bo2e" path="res://assets/objects/2021-07 watering_can small.png" id="12_6ptho"]
 [ext_resource type="PackedScene" uid="uid://dsm27n3vj1gny" path="res://objects/Plant.tscn" id="15_j3b6a"]
 [ext_resource type="Texture2D" uid="uid://dmq4g4xgltb7n" path="res://assets/objects/2021-07 window.png" id="16_7msvn"]
+[ext_resource type="PackedScene" uid="uid://c15b1tb34x8p2" path="res://scene/gui.tscn" id="19_7grxd"]
 [ext_resource type="Texture2D" uid="uid://b6nga7jmyiwt0" path="res://assets/objects/2021-07 garden_shear small.png" id="20_6acik"]
 [ext_resource type="AudioStream" uid="uid://dtabmqumblu1p" path="res://assets/audio/main_title2.wav" id="20_lk7ij"]
 [ext_resource type="Script" path="res://code/GameStateMachine.cs" id="21_ldcnm"]
@@ -656,9 +656,7 @@ texture = ExtResource("16_7msvn")
 position = Vector2(-81, -97)
 texture = ExtResource("16_7msvn")
 
-[node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="ItemDialogue" parent="GUI" instance=ExtResource("7_84cgy")]
+[node name="GUI" parent="." instance=ExtResource("19_7grxd")]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("20_lk7ij")
@@ -671,4 +669,3 @@ bus = &"AFX"
 script = ExtResource("21_ldcnm")
 
 [connection signal="Moved" from="MC" to="MC/InteractionManager" method="OnMcMoved"]
-[connection signal="ItemInteraction" from="MC/InteractionManager" to="GUI/ItemDialogue" method="OnItemInteraction"]

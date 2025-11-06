@@ -3,6 +3,10 @@ using Godot.NativeInterop;
 using System;
 using System.Collections.Generic;
 
+// todo: rename to InteractionSensor?
+/// <summary>
+/// It figures out what the entity touches.
+/// </summary>
 [Tool]
 public partial class InteractionManager : Area2D
 {
@@ -13,8 +17,8 @@ public partial class InteractionManager : Area2D
     [Export]
     private Godot.Collections.Array<Node2D> InteractablesInRange;
 
-    [Signal]
-    public delegate void ItemInteractionEventHandler(Interactable item);
+    //[Signal]
+    //public delegate void ItemInteractionEventHandler(Interactable item);
 
     private String ItemText;
     private Texture ItemTexture = null;
@@ -31,7 +35,9 @@ public partial class InteractionManager : Area2D
         if (!listenToInput) return;
         
         if (@event.IsActionReleased("Interact")){
-            EmitSignal(SignalName.ItemInteraction, ActiveItem);
+            //EmitSignal(SignalName.ItemInteraction, ActiveItem);
+            EventBus.InteractableEvents.InvokeItemInteractedEvent(ActiveItem);
+            //EmitSignal(SignalName.Interacted, ActiveItem);
             this.GetViewport().SetInputAsHandled();
         }
     }

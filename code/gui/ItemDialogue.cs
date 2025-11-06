@@ -54,8 +54,16 @@ public partial class ItemDialogue : MarginContainer
 
     public override void _EnterTree()
     {
-        Visible = true;
+        Visible = true; //???
+
+        EventBus.InteractableEvents.ItemInteracted += OnItemInteracted;
     }
+
+    public override void _ExitTree()
+    {
+        EventBus.InteractableEvents.ItemInteracted -= OnItemInteracted;
+    }
+
     public override void _Ready()
     {
 		Text = "";
@@ -109,7 +117,7 @@ public partial class ItemDialogue : MarginContainer
         Visible = false;
     }
 
-    private async void OnItemInteraction(Interactable item)
+    private async void OnItemInteracted(Interactable item)
     {
         Texture = item.ItemTexture;
         Text = item.ItemDescription;
