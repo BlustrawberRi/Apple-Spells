@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://code/item interactions/Interactable.cs" id="1_4e038"]
 [ext_resource type="Texture2D" uid="uid://bfhsxal5di40v" path="res://assets/objects/2021-07 note text.png" id="2_028wu"]
-[ext_resource type="Shader" path="res://objects/Item_Outline.gdshader" id="3_gj6hu"]
+[ext_resource type="Shader" path="res://GUI/Item_Outline.gdshader" id="3_gj6hu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g447u"]
 resource_local_to_scene = true

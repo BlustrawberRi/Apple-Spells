@@ -1,7 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://c15b1tb34x8p2"]
+[gd_scene load_steps=3 format=3 uid="uid://c15b1tb34x8p2"]
 
 [ext_resource type="PackedScene" uid="uid://b7arsmo7isgiv" path="res://GUI/item dialogue.tscn" id="1_nwdw7"]
+[ext_resource type="PackedScene" uid="uid://bkwh5u55tg7mv" path="res://GUI/inventory_ui.tscn" id="2_42lni"]
 
 [node name="GUI" type="CanvasLayer"]
 
 [node name="ItemDialogue" parent="." instance=ExtResource("1_nwdw7")]
+
+[node name="Inventory UI" parent="." instance=ExtResource("2_42lni")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.0
+grow_vertical = 1

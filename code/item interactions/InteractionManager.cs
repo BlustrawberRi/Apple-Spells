@@ -37,6 +37,7 @@ public partial class InteractionManager : Area2D
         if (@event.IsActionReleased("Interact")){
             //EmitSignal(SignalName.ItemInteraction, ActiveItem);
             EventBus.InteractableEvents.InvokeItemInteractedEvent(ActiveItem);
+            GD.Print("click");
             //EmitSignal(SignalName.Interacted, ActiveItem);
             this.GetViewport().SetInputAsHandled();
         }
