@@ -525,17 +525,6 @@ shape = SubResource("SegmentShape2D_fb3t3")
 z_index = 5
 position = Vector2(-1, -15)
 
-[node name="Player Cam" type="Camera2D" parent="MC"]
-limit_left = -365
-limit_top = -165
-limit_right = 515
-limit_bottom = 200
-position_smoothing_speed = 10.0
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-editor_draw_limits = true
-editor_draw_drag_margin = true
-
 [node name="Items" type="Node2D" parent="."]
 y_sort_enabled = true
 

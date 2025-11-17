@@ -70,8 +70,13 @@ public partial class Interactable : StaticBody2D
 
     // todo: make Interactable an Area2D
     //public override onBodyEntered
-    public  void React() {
-        Components.ForEach(c => c.React(this));
+    public  void React(Interactable interactionSource) 
+	{
+        Components.ForEach(c =>
+        {
+            if (c.CanInteract(interactionSource)) 
+				c.React(interactionSource, this);
+        });
     }
 
 

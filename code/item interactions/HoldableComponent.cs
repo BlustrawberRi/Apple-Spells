@@ -1,7 +1,9 @@
 using Godot;
 using System;
 
-
+/// <summary>
+/// This Component will allow the item to be held by the player. An Inventory should handle the EventBus.InteractableEvents.HoldableReacted(Interactable item) event this component will invoke. Does need an empty interactionSource to work.
+/// </summary>
 public partial class HoldableComponent : ItemComponent
 {
     [Export]
@@ -10,12 +12,14 @@ public partial class HoldableComponent : ItemComponent
     [Export(hint: PropertyHint.Range, hintString: "1,999")]
     public int MaxStackCount = 1;
 
-    public override void _Ready()
-    {
-        
+
+    public override bool CanInteract(Interactable interactionSource) {
+        if (interactionSource != null) return false;
+
+        return true;
     }
 
-    public override void React(Interactable item)
+    public override void React(Interactable interactionSource, Interactable item)
     {
         EventBus.InteractableEvents.InvokeHoldableReacted(item/*, this*/);
     }

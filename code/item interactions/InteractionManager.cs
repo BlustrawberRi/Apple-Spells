@@ -44,7 +44,7 @@ public partial class InteractionManager : Area2D
         if (@event.IsActionReleased("Use"))
         {
             GD.Print("Use " + ActiveItem.Name);
-            ActiveItem.React();
+            ActiveItem.React(null);
             EventBus.InteractableEvents.InvokeItemUsedEvent(ActiveItem);
             //Hand.React
             this.GetViewport().SetInputAsHandled();
