@@ -1,14 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgsewufraospb"]
+[gd_scene load_steps=3 format=3 uid="uid://dgsewufraospb"]
 
+[ext_resource type="Script" path="res://GUI/InventorySlotUI.cs" id="1_x1fk8"]
 [ext_resource type="Texture2D" uid="uid://bsqgmssq3bs2o" path="res://assets/ui/2024-05 dialogue-box-item.png" id="1_y3k5c"]
 
 [node name="Inventory Slot UI" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 3
+script = ExtResource("1_x1fk8")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
-custom_minimum_size = Vector2(15, 15)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 offset_right = 15.0
 offset_bottom = 15.0
@@ -18,3 +20,17 @@ patch_margin_left = 5
 patch_margin_top = 5
 patch_margin_right = 5
 patch_margin_bottom = 5
+
+[node name="ItemTexture" type="TextureRect" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2

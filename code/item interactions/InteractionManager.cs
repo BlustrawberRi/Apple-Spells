@@ -24,7 +24,7 @@ public partial class InteractionManager : Area2D
     private Texture ItemTexture = null;
     private bool listenToInput = false;
 
-    public override void _Ready() 
+    public override void _Ready()
     {
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExit;
@@ -33,28 +33,36 @@ public partial class InteractionManager : Area2D
     public override void _UnhandledInput(InputEvent @event)
     {
         if (!listenToInput) return;
-        
-        if (@event.IsActionReleased("Interact")){
-            //EmitSignal(SignalName.ItemInteraction, ActiveItem);
+
+
+        if (@event.IsActionReleased("Interact"))
+        {
             EventBus.InteractableEvents.InvokeItemInteractedEvent(ActiveItem);
-            GD.Print("click");
             //EmitSignal(SignalName.Interacted, ActiveItem);
+            this.GetViewport().SetInputAsHandled();
+        }
+        if (@event.IsActionReleased("Use"))
+        {
+            GD.Print("Use " + ActiveItem.Name);
+            ActiveItem.React();
+            EventBus.InteractableEvents.InvokeItemUsedEvent(ActiveItem);
+            //Hand.React
             this.GetViewport().SetInputAsHandled();
         }
     }
 
-    public bool UpdateActiveInteractable() 
+    public bool UpdateActiveInteractable()
     {
         Interactable newActive = null;
-        if (InteractablesInRange.Count != 0) 
+        if (InteractablesInRange.Count != 0)
             newActive = GetLookedAtInteractable();
 
-        if(newActive != ActiveItem) 
+        if (newActive != ActiveItem)
         {
             newActive?.Highlight(true);
-            ActiveItem?.Highlight(false);        
+            ActiveItem?.Highlight(false);
             ActiveItem = newActive;
-            listenToInput = (ActiveItem is null)? false : true;
+            listenToInput = (ActiveItem is null) ? false : true;
 
             _PrintInteractables();
             return true;
@@ -85,7 +93,7 @@ public partial class InteractionManager : Area2D
     /// </summary>
     private void OnMcMoved(Vector2 velocity)
     {
-        Rotation = -(velocity.Angle() + (float)Math.PI/(2.0f));
+        Rotation = -(velocity.Angle() + (float)Math.PI / (2.0f));
         //todo: actually just update every 5 frames or so...
         UpdateActiveInteractable();
     }
@@ -100,22 +108,25 @@ public partial class InteractionManager : Area2D
 
         Interactable closestThing = null;
         float distanceToThing = 0;
-        foreach(Node2D i in InteractablesInRange) {
+        foreach (Node2D i in InteractablesInRange)
+        {
             if (i is not Interactable) continue;
-            float distanceToI = 1/i.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
-            if (distanceToI > distanceToThing) {
+            float distanceToI = 1 / i.GlobalPosition.DistanceSquaredTo(this.GlobalPosition);
+            if (distanceToI > distanceToThing)
+            {
                 closestThing = i as Interactable;
                 distanceToThing = distanceToI;
             }
         }
 
-        return closestThing ;
+        return closestThing;
     }
 
-    private void _PrintInteractables() {
+    private void _PrintInteractables()
+    {
         string interactableList = "[";
         foreach (var item in InteractablesInRange)
-        {  
+        {
             if (item == ActiveItem)
                 interactableList += "[u]";
 
@@ -124,7 +135,8 @@ public partial class InteractionManager : Area2D
 
             if (item == ActiveItem)
                 interactableList += "[/u]";
-        };
+        }
+        ;
         GD.PrintRich(interactableList + "]");
-    }  
+    }
 }

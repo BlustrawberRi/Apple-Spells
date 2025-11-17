@@ -1,8 +1,9 @@
-[gd_scene load_steps=41 format=3 uid="uid://klq8mdlduuox"]
+[gd_scene load_steps=43 format=3 uid="uid://klq8mdlduuox"]
 
 [ext_resource type="Texture2D" uid="uid://cyttu6pjahnt2" path="res://assets/sprites/2024-5 AS MC Sprite.png" id="1_cpn3i"]
 [ext_resource type="Script" path="res://code/PlayerMovement.cs" id="1_x3qme"]
 [ext_resource type="AudioStream" uid="uid://cgpanaarx3nf4" path="res://assets/audio/step.wav" id="3_wglkf"]
+[ext_resource type="Script" path="res://code/item interactions/InteractionManager.cs" id="4_yvygf"]
 
 [sub_resource type="Animation" id="Animation_hgyeu"]
 length = 0.001
@@ -580,6 +581,9 @@ states/Walk/position = Vector2(710, 88)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_5g5aw"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_2jjaw"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_8be76")]
 graph_offset = Vector2(206, 11)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mjhbh"]
+size = Vector2(22, 27)
+
 [node name="MC" type="CharacterBody2D" node_paths=PackedStringArray("AnimTree")]
 script = ExtResource("1_x3qme")
 walkingSpeed = 80.0
@@ -592,7 +596,7 @@ texture = ExtResource("1_cpn3i")
 flip_h = true
 hframes = 4
 vframes = 8
-frame = 29
+frame = 28
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")
@@ -621,3 +625,15 @@ parameters/Walk/WalkSpeed/scale = 1.0
 stream = ExtResource("3_wglkf")
 volume_db = -18.105
 bus = &"AFX"
+
+[node name="InteractionManager" type="Area2D" parent="." node_paths=PackedStringArray("InteractablesInRange")]
+position = Vector2(0, -10)
+script = ExtResource("4_yvygf")
+InteractablesInRange = []
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InteractionManager"]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_mjhbh")
+debug_color = Color(0.625262, 0.398864, 0.897547, 0.42)
+
+[connection signal="Moved" from="." to="InteractionManager" method="OnMcMoved"]

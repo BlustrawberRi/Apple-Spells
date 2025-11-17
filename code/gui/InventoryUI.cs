@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class InventoryUI : Control
 {
@@ -16,6 +17,7 @@ public partial class InventoryUI : Control
     public int slotCount = 5;
 
     private Inventory Inventory;
+    private List<InventorySlotUI> UISlots = new();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -23,15 +25,38 @@ public partial class InventoryUI : Control
         CreateInventory();
     }
 
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+        EventBus.InteractableEvents.HoldableReacted += AddInteractable;
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        EventBus.InteractableEvents.HoldableReacted -= AddInteractable;
+    }
+
     private void CreateInventory()
     {
         Inventory = new Inventory(slotCount);
         for (int i = 0; i < slotCount; i++)
         {
-            Node slot = InventorySlotTemplate.Instantiate<Node>();
+            InventorySlotUI slot = (InventorySlotUI)InventorySlotTemplate.Instantiate<Node>();
             slot.Name = "Slot " + (i + 1);
             this.AddChild(slot);
+            UISlots.Add(slot);
         }
+    }
+
+    private void AddInteractable (Interactable item) {
+        int itemIndex = Inventory.AddItem(item);
+        if (itemIndex < 0 || itemIndex>UISlots.Count) {
+            GD.PrintErr("No space in inventory for "+ item.Name);
+            return;
+        }
+        UISlots.ElementAt(0).StoreItem(item);
+        
     }
 
 }
@@ -77,22 +102,31 @@ public class Inventory
 	/// Adds an Interactable to the Inventory.
 	/// </summary>
 	/// <param name="item">The Interactable to be stored in the Inventory.</param>
-	/// <returns>"True", if succesfull. "False", if no empty spaces left.</returns>
-    public bool AddItem(Interactable item)
+	/// <returns>The position, if succesfull. -1, if no empty spaces left.</returns>
+    public int AddItem(Interactable item)
     {
-        if (AddItemToExistingStack(item)) 
-			return true;
-        var emptySpace = Spaces.Find(s => s == null);
-        if (emptySpace == null) return false;
+        //int stackIndex = AddItemToExistingStack(item);
+        //if (stackIndex != -1)  return stackIndex;
+
+        int index = 0;
+        InventorySpace emptySpace = null;
+        foreach(var space in Spaces) {
+            if (space == null) {
+                emptySpace = space;
+                break;
+            }
+            index++;
+        }
+        if (emptySpace == null) return -1;
 
         emptySpace.Fill(item);
-        return true;
+        return index;
     }
 
-    private bool AddItemToExistingStack(Interactable item)
+    private int AddItemToExistingStack(Interactable item)
     {
-		// Todo
-        return false;
+		// todo
+        return -1;
     }
 }
 

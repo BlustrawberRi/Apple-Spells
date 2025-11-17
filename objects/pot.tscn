@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b17rx8gwci716" path="res://objects/Item.tscn" id="1_3sbty"]
 [ext_resource type="Shader" path="res://GUI/Item_Outline.gdshader" id="2_8m7b7"]
-[ext_resource type="Script" path="res://code/HoldableComponent.cs" id="4_hsvde"]
+[ext_resource type="Script" path="res://code/item interactions/HoldableComponent.cs" id="4_hsvde"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_njwij"]
 resource_local_to_scene = true

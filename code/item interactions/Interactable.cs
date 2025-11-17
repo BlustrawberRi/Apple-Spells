@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 
 [Tool]
@@ -8,8 +9,9 @@ using System.Reflection.Metadata.Ecma335;
 /// </summary>
 public partial class Interactable : StaticBody2D
 {
+    [Export] public Texture2D Text;
 
-	[Export]
+    [Export]
 	public Texture ItemTexture 
 	{
 		get
@@ -38,22 +40,39 @@ public partial class Interactable : StaticBody2D
 
 	private Sprite2D TextureContainer;
 	private AnimationPlayer AnimationPlayer;
+	public List<ItemComponent> Components {
+        get; private set;
+    }
 	
     public override void _Ready()
     {
-		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
-		TextureContainer?.Set("texture", ItemTexture);
+        GetComponentsInChildren();
 
-		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		//ItemTexture = ItemTexture; //initialize the set Texture
+        TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
+        TextureContainer?.Set("texture", ItemTexture);
+
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        //ItemTexture = ItemTexture; //initialize the set Texture
     }
-    public override void _Process(double delta)
+
+    private void GetComponentsInChildren()
     {
-        
+        Components = new();
+        foreach (var child in this.GetChildren())
+        {
+            var type = child.GetType();
+            if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
+            {
+                Components.Add(child as ItemComponent);
+            }
+        }
     }
-	
-	// todo: make Interactable an Area2D
-	//public override onBodyEntered
+
+    // todo: make Interactable an Area2D
+    //public override onBodyEntered
+    public  void React() {
+        Components.ForEach(c => c.React(this));
+    }
 
 
 // todo: put this in the interaction Manager

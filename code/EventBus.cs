@@ -11,5 +11,18 @@ public static class EventBus
         {
             ItemInteracted?.Invoke(item);
         }
+
+        public static Action<Interactable> ItemUsed;
+
+        public static void InvokeItemUsedEvent(Interactable item)
+        {
+            ItemUsed?.Invoke(item);
+        }
+
+        public static Action<Interactable> HoldableReacted; 
+        public static void InvokeHoldableReacted(Interactable holdableItem) {
+
+            HoldableReacted?.Invoke(holdableItem);
+        }
     }
 }

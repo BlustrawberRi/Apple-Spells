@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://co3rtrwgsx88k"]
+[gd_scene load_steps=31 format=3 uid="uid://co3rtrwgsx88k"]
 
 [ext_resource type="PackedScene" uid="uid://klq8mdlduuox" path="res://characters/Main Character.tscn" id="1_mb1y4"]
 [ext_resource type="Texture2D" uid="uid://4sgd6bhafbf4" path="res://assets/tilesets/2021-07 grass.png" id="1_qcqgu"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dp73owrke1sb5" path="res://assets/tilesets/floor_trampled.png" id="4_ykqrj"]
 [ext_resource type="Texture2D" uid="uid://b43kd47knlv3m" path="res://assets/tilesets/floor_light_wood.png" id="5_v78t2"]
 [ext_resource type="PackedScene" uid="uid://b17rx8gwci716" path="res://objects/Item.tscn" id="7_5x76a"]
-[ext_resource type="Script" path="res://code/item interactions/InteractionManager.cs" id="7_ayg7c"]
 [ext_resource type="Texture2D" uid="uid://cvf54lcfh4qy3" path="res://assets/objects/2021-07 note plant.png" id="8_cc0ej"]
 [ext_resource type="Texture2D" uid="uid://b0sgaejjcc344" path="res://assets/objects/2021-07 bed.png" id="9_6noq5"]
 [ext_resource type="Texture2D" uid="uid://c8a04geg0h3t6" path="res://assets/objects/2021-07 note person.png" id="9_v1ijy"]
@@ -17,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://bvffriaa6bo2e" path="res://assets/objects/2021-07 watering_can small.png" id="12_6ptho"]
 [ext_resource type="PackedScene" uid="uid://dsm27n3vj1gny" path="res://objects/Plant.tscn" id="15_j3b6a"]
 [ext_resource type="Texture2D" uid="uid://dmq4g4xgltb7n" path="res://assets/objects/2021-07 window.png" id="16_7msvn"]
+[ext_resource type="Script" path="res://code/item interactions/HoldableComponent.cs" id="17_ai75b"]
 [ext_resource type="PackedScene" uid="uid://c15b1tb34x8p2" path="res://scene/gui.tscn" id="19_7grxd"]
 [ext_resource type="Texture2D" uid="uid://b6nga7jmyiwt0" path="res://assets/objects/2021-07 garden_shear small.png" id="20_6acik"]
 [ext_resource type="AudioStream" uid="uid://dtabmqumblu1p" path="res://assets/audio/main_title2.wav" id="20_lk7ij"]
@@ -499,9 +499,6 @@ sources/3 = SubResource("TileSetAtlasSource_fuo1r")
 a = Vector2(-18, -1)
 b = Vector2(16, -1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s05c8"]
-size = Vector2(22, 27)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_giga3"]
 size = Vector2(20, 23)
 
@@ -538,16 +535,6 @@ drag_horizontal_enabled = true
 drag_vertical_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
-
-[node name="InteractionManager" type="Area2D" parent="MC" node_paths=PackedStringArray("InteractablesInRange")]
-position = Vector2(0, -10)
-script = ExtResource("7_ayg7c")
-InteractablesInRange = []
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="MC/InteractionManager"]
-position = Vector2(0, 15)
-shape = SubResource("RectangleShape2D_s05c8")
-debug_color = Color(0.625262, 0.398864, 0.897547, 0.42)
 
 [node name="Items" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -623,6 +610,7 @@ ItemDescription = "A mere pot"
 
 [node name="Watering Can" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(222, 60)
+Text = ExtResource("12_6ptho")
 ItemTexture = ExtResource("12_6ptho")
 ItemDescription = "At some point I should water the plants.
 
@@ -635,6 +623,9 @@ If I had plants...
 
 
 ... [fade length=44]And could pick up the watering can...[/fade]"
+
+[node name="Holdable" type="Node" parent="Items/Watering Can"]
+script = ExtResource("17_ai75b")
 
 [node name="Item2" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(93, 22)
@@ -667,5 +658,3 @@ bus = &"AFX"
 
 [node name="GameStateMachine" type="Node" parent="."]
 script = ExtResource("21_ldcnm")
-
-[connection signal="Moved" from="MC" to="MC/InteractionManager" method="OnMcMoved"]
