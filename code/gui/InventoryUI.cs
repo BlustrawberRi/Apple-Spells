@@ -39,24 +39,25 @@ public partial class InventoryUI : Control
 
     private void CreateInventory()
     {
+        UISlots = new(slotCount);
         Inventory = new Inventory(slotCount);
         for (int i = 0; i < slotCount; i++)
         {
             InventorySlotUI slot = (InventorySlotUI)InventorySlotTemplate.Instantiate<Node>();
             slot.Name = "Slot " + (i + 1);
+            slot.SetSpace(Inventory.GetSpaceAt(i));
             this.AddChild(slot);
             UISlots.Add(slot);
         }
     }
 
     private void AddInteractable (Interactable item) {
-        int itemIndex = Inventory.AddItem(item);
-        if (itemIndex < 0 || itemIndex>UISlots.Count) {
-            GD.PrintErr("No space in inventory for "+ item.Name);
+
+        if (!Inventory.AddItem(item))
+        {
+            GD.PrintErr("No space in inventory for " + item.Name);
             return;
         }
-        UISlots.ElementAt(0).StoreItem(item);
-        
     }
 
 }
@@ -64,80 +65,90 @@ public partial class InventoryUI : Control
 public class Inventory
 {
     private List<InventorySpace> Spaces;
-    public int SpaceCount => Spaces.Count;
+    public int Capacity => Spaces.Count;
+    public int OccupiedSpaceCount;
+    public int FreeSpaceCount => Capacity - OccupiedSpaceCount;
 
     private Inventory() {
         Spaces = new();
     }
 
-	public Inventory ( int spaceCount) {
+    public Inventory(int spaceCount)
+    {
         Spaces = new(spaceCount);
+        OccupiedSpaceCount = 0;
+        for(int i = 0; i<spaceCount; i++)
+            Spaces.Add(new());
+    }
+    
+    public InventorySpace GetSpaceAt(int index)
+    {
+        if (index+1 > Spaces.Count)
+        {
+            GD.PushWarning("Not enough Spaces in this Inventory than the index asked for.");
+            return null;
+        }
+        return Spaces[index];
     }
 
-    public bool SetSize(int spaceNumber)
+    public bool SetSize(int newSpaceCount)
     {
-        if (spaceNumber == Spaces.Count || spaceNumber < 0) return true;
-        if (spaceNumber > Spaces.Count)
+        if (newSpaceCount == Capacity || newSpaceCount < 0) return true;
+        if (newSpaceCount > Capacity)
         {
-            while (spaceNumber > Spaces.Count)
-                Spaces.Add(null);
+            for (int i = 0; i < newSpaceCount - Capacity; i++)
+                Spaces.Add(new());
             return true;
         }
-        if (spaceNumber < Spaces.Count)
+        if (newSpaceCount < Capacity && FreeSpaceCount >= Capacity - newSpaceCount)
         {
-            int emptySpaceCount = 0;
-            Spaces.ForEach(space => emptySpaceCount += (space == null) ? 1 : 0);
-            if (emptySpaceCount >= spaceNumber-Spaces.Count) {
-				while (spaceNumber < Spaces.Count) {
-                    var emptySpace = Spaces.Find(s => s == null);
-                    Spaces.Remove(emptySpace);
-                }
-                return true;
+            for (int i = Capacity-newSpaceCount-1; i >= 0; i--)
+            {
+                int emptySpaceIndex = Spaces.FindLastIndex(space => space == null);
+                Spaces.RemoveAt(emptySpaceIndex);
             }
+            return true;
         }
         return false;
     }
 
-	/// <summary>
-	/// Adds an Interactable to the Inventory.
-	/// </summary>
-	/// <param name="item">The Interactable to be stored in the Inventory.</param>
-	/// <returns>The position, if succesfull. -1, if no empty spaces left.</returns>
-    public int AddItem(Interactable item)
+    /// <summary>
+    /// Adds an Interactable to the Inventory.
+    /// </summary>
+    /// <param name="item">The Interactable to be stored in the Inventory.</param>
+    /// <returns>The position, if succesfull. -1, if no empty spaces left.</returns>
+    public bool AddItem(Interactable item)
     {
         //int stackIndex = AddItemToExistingStack(item);
         //if (stackIndex != -1)  return stackIndex;
 
-        int index = 0;
-        InventorySpace emptySpace = null;
-        foreach(var space in Spaces) {
-            if (space == null) {
-                emptySpace = space;
-                break;
-            }
-            index++;
-        }
-        if (emptySpace == null) return -1;
+        if (FreeSpaceCount == 0)
+            return false;
 
-        emptySpace.Fill(item);
-        return index;
+        Spaces.Find(s => s.Item == null).Fill(item);
+        OccupiedSpaceCount++;
+        return true;
     }
 
-    private int AddItemToExistingStack(Interactable item)
+    private bool AddItemToExistingStack(Interactable item)
     {
-		// todo
-        return -1;
+        // todo
+        return false;
     }
+
 }
 
 public class InventorySpace
 {
-    public Interactable Item = null; 
-    public int Amount = 0;
+    public Interactable Item { private set; get; }
 
-    public void Fill(Interactable item) {
+    public int Amount = 0;
+    public event Action Changed;
+
+    public void Fill (Interactable item) {
 		//todo: dont fill if full, to avoid errors
         Item = item;
         Amount = 1;
+        Changed?.Invoke();
     }
 }

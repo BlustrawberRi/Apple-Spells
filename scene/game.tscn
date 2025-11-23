@@ -562,7 +562,7 @@ ItemDescription = "         [u]Todo List[/u]
 [s]add music[/s]
 create an actual game[/ul]"
 
-[node name="Item" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Note On the Wall" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(322, -44)
 ItemDescription = "I have a song stuck in my head.... I asked my friends if they knew it, but they didn't. It drives me crazy. If anyone knows this song, please tell me what it is.
 
@@ -599,7 +599,6 @@ ItemDescription = "A mere pot"
 
 [node name="Watering Can" parent="Items" instance=ExtResource("7_5x76a")]
 position = Vector2(222, 60)
-Text = ExtResource("12_6ptho")
 ItemTexture = ExtResource("12_6ptho")
 ItemDescription = "At some point I should water the plants.
 

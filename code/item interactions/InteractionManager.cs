@@ -62,7 +62,7 @@ public partial class InteractionManager : Area2D
             newActive?.Highlight(true);
             ActiveItem?.Highlight(false);
             ActiveItem = newActive;
-            listenToInput = (ActiveItem is null) ? false : true;
+            listenToInput = ActiveItem is not null;
 
             _PrintInteractables();
             return true;

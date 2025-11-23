@@ -9,10 +9,10 @@ using System.Reflection.Metadata.Ecma335;
 /// </summary>
 public partial class Interactable : StaticBody2D
 {
-    [Export] public Texture2D Text;
+    //[Export] public Texture2D Text;
 
     [Export]
-	public Texture ItemTexture 
+	public Texture2D ItemTexture 
 	{
 		get
 		{
@@ -21,7 +21,9 @@ public partial class Interactable : StaticBody2D
 		set
 		{
 			_itemTexture = value;
-			TextureContainer?.Set("texture", value);
+			if( TextureContainer != null)
+				TextureContainer.Texture = value;
+			//TextureContainer?.Set("texture", value);
 		}
 	}
 	[Export(PropertyHint.MultilineText)]
@@ -36,7 +38,7 @@ public partial class Interactable : StaticBody2D
 			return ItemTexture?.ResourcePath;
 		}
 	}
-	private Texture _itemTexture;
+	private Texture2D _itemTexture;
 
 	private Sprite2D TextureContainer;
 	private AnimationPlayer AnimationPlayer;
