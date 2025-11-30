@@ -596,7 +596,7 @@ texture = ExtResource("1_cpn3i")
 flip_h = true
 hframes = 4
 vframes = 8
-frame = 29
+frame = 28
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")

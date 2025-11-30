@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bkwh5u55tg7mv"]
+[gd_scene load_steps=5 format=3 uid="uid://bkwh5u55tg7mv"]
 
 [ext_resource type="Script" path="res://code/gui/InventoryUI.cs" id="1_x86do"]
 [ext_resource type="PackedScene" uid="uid://dgsewufraospb" path="res://GUI/inventory_slot_ui.tscn" id="2_li7h8"]
+[ext_resource type="Resource" uid="uid://d2anjsgcsrmoh" path="res://GUI/bag_inventory.tres" id="3_bf75c"]
+[ext_resource type="AudioStream" uid="uid://c16ynyvq5br74" path="res://assets/audio/pickup_item.wav" id="4_340ay"]
 
 [node name="Inventory UI" type="Control"]
 layout_mode = 3
@@ -22,7 +24,13 @@ offset_bottom = 15.0
 grow_horizontal = 2
 theme_override_constants/margin_top = 10
 
-[node name="SlotContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="SlotContainer" type="HBoxContainer" parent="MarginContainer" node_paths=PackedStringArray("audioPlayer")]
 layout_mode = 2
 script = ExtResource("1_x86do")
 InventorySlotTemplate = ExtResource("2_li7h8")
+Inventory = ExtResource("3_bf75c")
+audioPlayer = NodePath("../../AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_340ay")
+volume_db = 5.956

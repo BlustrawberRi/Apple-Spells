@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://co3rtrwgsx88k"]
+[gd_scene load_steps=32 format=3 uid="uid://co3rtrwgsx88k"]
 
 [ext_resource type="PackedScene" uid="uid://klq8mdlduuox" path="res://characters/Main Character.tscn" id="1_mb1y4"]
 [ext_resource type="Texture2D" uid="uid://4sgd6bhafbf4" path="res://assets/tilesets/2021-07 grass.png" id="1_qcqgu"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b43kd47knlv3m" path="res://assets/tilesets/floor_light_wood.png" id="5_v78t2"]
 [ext_resource type="PackedScene" uid="uid://b17rx8gwci716" path="res://objects/Item.tscn" id="7_5x76a"]
 [ext_resource type="Texture2D" uid="uid://cvf54lcfh4qy3" path="res://assets/objects/2021-07 note plant.png" id="8_cc0ej"]
+[ext_resource type="Script" path="res://code/SceneItemLoader.cs" id="8_w1ldh"]
 [ext_resource type="Texture2D" uid="uid://b0sgaejjcc344" path="res://assets/objects/2021-07 bed.png" id="9_6noq5"]
 [ext_resource type="Texture2D" uid="uid://c8a04geg0h3t6" path="res://assets/objects/2021-07 note person.png" id="9_v1ijy"]
 [ext_resource type="Texture2D" uid="uid://u3u1vlb8g746" path="res://assets/objects/2021-07 terracotta_pot small.png" id="10_8hiul"]
@@ -525,18 +526,20 @@ shape = SubResource("SegmentShape2D_fb3t3")
 z_index = 5
 position = Vector2(-1, -15)
 
-[node name="Items" type="Node2D" parent="."]
+[node name="SceneItemLoader" type="Node2D" parent="."]
 y_sort_enabled = true
+script = ExtResource("8_w1ldh")
 
-[node name="2021-07Bed" type="Sprite2D" parent="Items"]
+[node name="2021-07Bed" type="Sprite2D" parent="SceneItemLoader"]
 position = Vector2(-146, -73)
 texture = ExtResource("9_6noq5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Items/2021-07Bed"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneItemLoader/2021-07Bed"]
 position = Vector2(0, 4.5)
 shape = SubResource("RectangleShape2D_giga3")
 
-[node name="Plant Note" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Plant Note" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(-59, 54)
 ItemTexture = ExtResource("8_cc0ej")
 ItemDescription = "You are playing the Godot Prototype of [wave]Apple Spells[/wave]!
@@ -545,7 +548,8 @@ This is my very first time using Godot and I had fun learning all this new stuff
 I made sure the code is clean and good for future work, that where a lot of time went "
 metadata/text = "What are you doing? \\nSomething the matter?? Longer text lonnnnggger text"
 
-[node name="Note" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Note" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(459, -18)
 ItemTexture = ExtResource("9_v1ijy")
 ItemDescription = "         [u]Todo List[/u]
@@ -562,7 +566,8 @@ ItemDescription = "         [u]Todo List[/u]
 [s]add music[/s]
 create an actual game[/ul]"
 
-[node name="Note On the Wall" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Note On the Wall" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(322, -44)
 ItemDescription = "I have a song stuck in my head.... I asked my friends if they knew it, but they didn't. It drives me crazy. If anyone knows this song, please tell me what it is.
 
@@ -574,30 +579,35 @@ while I still contemplate
 all the things I have learned 
 how my brain becomes numb[/wave]"
 
-[node name="Sack" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Sack" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(437, -16)
 scale = Vector2(1, 0.992244)
 ItemTexture = ExtResource("11_bceq8")
 
-[node name="Pot 3" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Pot 3" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(443, -10)
 ItemTexture = ExtResource("10_8hiul")
 
-[node name="Pot 2" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Pot 2" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(211, -23)
 ItemTexture = ExtResource("10_8hiul")
 
-[node name="Plant" parent="Items/Pot 2" instance=ExtResource("15_j3b6a")]
+[node name="Plant" parent="SceneItemLoader/Pot 2" instance=ExtResource("15_j3b6a")]
 disable_mode = 1
 
-[node name="Pot 1" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Pot 1" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(53, -6)
 ItemTexture = ExtResource("10_8hiul")
 ItemDescription = "A mere pot"
 
-[node name="Plant" parent="Items/Pot 1" instance=ExtResource("15_j3b6a")]
+[node name="Plant" parent="SceneItemLoader/Pot 1" instance=ExtResource("15_j3b6a")]
 
-[node name="Watering Can" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Watering Can" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(222, 60)
 ItemTexture = ExtResource("12_6ptho")
 ItemDescription = "At some point I should water the plants.
@@ -612,26 +622,27 @@ If I had plants...
 
 ... [fade length=44]And could pick up the watering can...[/fade]"
 
-[node name="Holdable" type="Node" parent="Items/Watering Can"]
+[node name="Holdable" type="Node" parent="SceneItemLoader/Watering Can"]
 script = ExtResource("17_ai75b")
 
-[node name="Item2" parent="Items" instance=ExtResource("7_5x76a")]
+[node name="Item2" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
+process_mode = 1
 position = Vector2(93, 22)
 ItemTexture = ExtResource("11_bceq8")
 
-[node name="2021-07GardenShearSmall" type="Sprite2D" parent="Items"]
+[node name="2021-07GardenShearSmall" type="Sprite2D" parent="SceneItemLoader"]
 position = Vector2(242, 54)
 texture = ExtResource("20_6acik")
 
-[node name="2021-07Window2" type="Sprite2D" parent="Items"]
+[node name="2021-07Window2" type="Sprite2D" parent="SceneItemLoader"]
 position = Vector2(80, -97)
 texture = ExtResource("16_7msvn")
 
-[node name="2021-07Window" type="Sprite2D" parent="Items"]
+[node name="2021-07Window" type="Sprite2D" parent="SceneItemLoader"]
 position = Vector2(0, -97)
 texture = ExtResource("16_7msvn")
 
-[node name="2021-07Window3" type="Sprite2D" parent="Items"]
+[node name="2021-07Window3" type="Sprite2D" parent="SceneItemLoader"]
 position = Vector2(-81, -97)
 texture = ExtResource("16_7msvn")
 

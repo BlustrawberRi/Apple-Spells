@@ -45,34 +45,34 @@ public partial class Interactable : StaticBody2D
 	public List<ItemComponent> Components {
         get; private set;
     }
+
+	public override void _Ready()
+	{
+		this.ProcessMode = ProcessModeEnum.Pausable;
+		GetComponentsInChildren();
+
+		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
+		TextureContainer?.Set("texture", ItemTexture);
+
+		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		//ItemTexture = ItemTexture; //initialize the set Texture
+	}
+
+	public void Disable()
+	{
+		this.Visible = false;
+		this.ProcessMode = ProcessModeEnum.Disabled;
+	}
 	
-    public override void _Ready()
+	public void Enable()
     {
-        GetComponentsInChildren();
-
-        TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
-        TextureContainer?.Set("texture", ItemTexture);
-
-        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        //ItemTexture = ItemTexture; //initialize the set Texture
-    }
-
-    private void GetComponentsInChildren()
-    {
-        Components = new();
-        foreach (var child in this.GetChildren())
-        {
-            var type = child.GetType();
-            if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
-            {
-                Components.Add(child as ItemComponent);
-            }
-        }
+		this.Visible = true;
+		this.ProcessMode = ProcessModeEnum.Pausable;
     }
 
     // todo: make Interactable an Area2D
     //public override onBodyEntered
-    public  void React(Interactable interactionSource) 
+    public void React(Interactable interactionSource) 
 	{
         Components.ForEach(c =>
         {
@@ -91,4 +91,16 @@ public partial class Interactable : StaticBody2D
 			AnimationPlayer.Play(AnimationPlayer.AssignedAnimation, -1, -2f, true);	
 	}
 	
+    private void GetComponentsInChildren()
+    {
+        Components = new();
+        foreach (var child in this.GetChildren())
+        {
+            var type = child.GetType();
+            if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
+            {
+                Components.Add(child as ItemComponent);
+            }
+        }
+    }
 }

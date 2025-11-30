@@ -44,7 +44,7 @@ public partial class Plant : StaticBody2D
     private Sprite2D _plantSprite;
 
     // Called when the node enters the scene tree for the first time.
-    public override async void _Ready()
+    public override void _Ready()
 	{
 		PlantSprite = GetNode<Sprite2D>("PlantSprite");
 		MaxGrowthPhase = PlantSprite.Hframes-1;

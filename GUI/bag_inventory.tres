@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Inventory" load_steps=2 format=3 uid="uid://d2anjsgcsrmoh"]
+
+[ext_resource type="Script" path="res://code/Inventory.cs" id="1_ntumo"]
+
+[resource]
+script = ExtResource("1_ntumo")
+Capacity = 5

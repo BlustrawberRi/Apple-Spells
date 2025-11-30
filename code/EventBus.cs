@@ -19,10 +19,21 @@ public static class EventBus
             ItemUsed?.Invoke(item);
         }
 
-        public static Action<Interactable> HoldableReacted; 
-        public static void InvokeHoldableReacted(Interactable holdableItem) {
+        public static Action<Interactable> HoldableReacted;
+        public static void InvokeHoldableReacted(Interactable holdableItem)
+        {
 
             HoldableReacted?.Invoke(holdableItem);
+        }
+
+    }
+    
+    public struct UIEvents
+    {
+        public static Action<Interactable> InventoryAccepted;
+        public static void InvokeInventoryAccepted(Interactable holdableItem)
+        {
+            InventoryAccepted?.Invoke(holdableItem);
         }
     }
 }

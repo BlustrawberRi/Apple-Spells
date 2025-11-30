@@ -6,7 +6,8 @@ public partial class InventorySlotUI : Control
     //[Export]
     private TextureRect itemTextureContainer;
     //private Interactable storedItem;
-    private InventorySpace inventorySpace;
+    [Export]
+    private InventorySpace inventorySpace = new();
 
     public override void _Ready()
 	{
