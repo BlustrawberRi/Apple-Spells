@@ -1,7 +1,8 @@
 using Godot;
 using System;
 
-public abstract partial class ItemComponent : Node
+[GlobalClass]
+public abstract partial class ItemComponent : Resource
 {
     /// <summary>
     /// The components reaction to an interaction.

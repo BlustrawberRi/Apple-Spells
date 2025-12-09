@@ -1,7 +1,6 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
+using System.ComponentModel;
 
 [Tool]
 /// <summary>
@@ -9,7 +8,9 @@ using System.Reflection.Metadata.Ecma335;
 /// </summary>
 public partial class Interactable : StaticBody2D
 {
-    //[Export] public Texture2D Text;
+	//[Export] public Texture2D Text;
+	[Export]
+	public ItemInstance ItemInstance;
 
     [Export]
 	public Texture2D ItemTexture 
@@ -42,14 +43,14 @@ public partial class Interactable : StaticBody2D
 
 	private Sprite2D TextureContainer;
 	private AnimationPlayer AnimationPlayer;
-	public List<ItemComponent> Components {
-        get; private set;
-    }
+	// public List<ItemComponent> Components {
+    //     get; private set;
+    // }
 
 	public override void _Ready()
 	{
 		this.ProcessMode = ProcessModeEnum.Pausable;
-		GetComponentsInChildren();
+		// GetComponentsInChildren();
 
 		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
 		TextureContainer?.Set("texture", ItemTexture);
@@ -72,13 +73,15 @@ public partial class Interactable : StaticBody2D
 
     // todo: make Interactable an Area2D
     //public override onBodyEntered
-    public void React(Interactable interactionSource) 
+    public void React(Interactable interactionSource)
 	{
-        Components.ForEach(c =>
+		if (ItemInstance == null || ItemInstance.Components.Count == 0) return;
+
+		foreach(var c in ItemInstance.Components)
         {
             if (c.CanInteract(interactionSource)) 
 				c.React(interactionSource, this);
-        });
+        }
     }
 
 
@@ -91,16 +94,16 @@ public partial class Interactable : StaticBody2D
 			AnimationPlayer.Play(AnimationPlayer.AssignedAnimation, -1, -2f, true);	
 	}
 	
-    private void GetComponentsInChildren()
-    {
-        Components = new();
-        foreach (var child in this.GetChildren())
-        {
-            var type = child.GetType();
-            if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
-            {
-                Components.Add(child as ItemComponent);
-            }
-        }
-    }
+    // private void GetComponentsInChildren()
+    // {
+    //     Components = new();
+    //     foreach (var child in this.GetChildren())
+    //     {
+    //         var type = child.GetType();
+    //         if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
+    //         {
+    //             Components.Add(child as ItemComponent);
+    //         }
+    //     }
+    // }
 }

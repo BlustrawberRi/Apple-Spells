@@ -4,6 +4,7 @@ using System;
 /// <summary>
 /// This Component will allow the item to be held by the player. An Inventory should handle the EventBus.InteractableEvents.HoldableReacted(Interactable item) event this component will invoke. Does need an empty interactionSource to work.
 /// </summary>
+[GlobalClass]
 public partial class HoldableComponent : ItemComponent
 {
     [Export]
@@ -13,7 +14,8 @@ public partial class HoldableComponent : ItemComponent
     public int MaxStackCount = 1;
 
 
-    public override bool CanInteract(Interactable interactionSource) {
+    public override bool CanInteract(Interactable interactionSource)
+    {
         if (interactionSource != null) return false;
 
         return true;

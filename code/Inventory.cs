@@ -1,11 +1,14 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 [GlobalClass]
 public partial class Inventory : Resource
 {
-    private List<InventorySpace> Spaces;
+    [Export]
+    private Godot.Collections.Array<InventorySpace> Spaces;
+
     [Export]
     public int Capacity = 5;
     public int OccupiedSpaceCount;
@@ -13,7 +16,7 @@ public partial class Inventory : Resource
 
     private Inventory()
     {
-        Spaces = new(Capacity);
+        Spaces = new Godot.Collections.Array<InventorySpace>();
         OccupiedSpaceCount = 0;
         for (int i = 0; i < Capacity; i++)
             Spaces.Add(new());
@@ -37,15 +40,24 @@ public partial class Inventory : Resource
         {
             for (int i = 0; i < newSpaceCount - Capacity; i++)
                 Spaces.Add(new());
+
+            Capacity = newSpaceCount;
             return true;
         }
         if (newSpaceCount < Capacity && FreeSpaceCount >= Capacity - newSpaceCount)
         {
             for (int i = Capacity - newSpaceCount - 1; i >= 0; i--)
             {
-                int emptySpaceIndex = Spaces.FindLastIndex(space => space == null);
-                Spaces.RemoveAt(emptySpaceIndex);
+                foreach (var space in Spaces)
+                {
+                    if (space.Item == null)
+                    {
+                        Spaces.Remove(space);
+                        break;
+                    }
+                }
             }
+            Capacity = newSpaceCount;
             return true;
         }
         return false;
@@ -64,9 +76,17 @@ public partial class Inventory : Resource
         if (FreeSpaceCount == 0)
             return false;
 
-        Spaces.Find(s => s.Item == null).Fill(item);
-        OccupiedSpaceCount++;
-        return true;
+        foreach (var space in Spaces)
+        {
+            if (space.Item == null)
+            {
+                space.Fill(item);
+                OccupiedSpaceCount++;
+                return true;
+            }
+        }
+        GD.PushError("Free Space count isnt 0, but there seems to be no space that has no item in " + this.ResourceName);
+        return false;
     }
 
     private bool AddItemToExistingStack(Interactable item)
@@ -80,7 +100,8 @@ public partial class Inventory : Resource
 
 public partial class InventorySpace : GodotObject
 {
-    public Interactable Item { private set; get; }
+    [Export]
+    public ItemInstance Item { private set; get; }
 
     public int Amount = 0;
     public event Action Changed;
@@ -88,7 +109,7 @@ public partial class InventorySpace : GodotObject
     public void Fill(Interactable item)
     {
         //todo: dont fill if full, to avoid errors
-        Item = item;
+        Item = item.ItemInstance;
         Amount = 1;
         Changed?.Invoke();
     }
