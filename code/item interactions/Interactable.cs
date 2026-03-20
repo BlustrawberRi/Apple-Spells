@@ -53,7 +53,7 @@ public partial class Interactable : StaticBody2D
 		// GetComponentsInChildren();
 
 		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
-		TextureContainer?.Set("texture", ItemTexture);
+		TextureContainer?.Set("texture", ItemInstance.Texture);
 
 		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		//ItemTexture = ItemTexture; //initialize the set Texture

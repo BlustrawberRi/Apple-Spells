@@ -12,9 +12,9 @@ public abstract partial class ItemComponent : Resource
     public abstract void React(Interactable interactionSource, Interactable item);
 
     /// <summary>
-    /// Checks if the component should react with React().
+    /// Checks if all the conditions to React are met.
     /// </summary>
     /// <param name="interactionSource">The item that was used to cause the interaction.</param>
-    /// <returns>If this component can manage this interaction with the given source.</returns>
+    /// <returns>Wether this component can manage this interaction with the given source.</returns>
     public abstract bool CanInteract(Interactable interactionSource);
 }

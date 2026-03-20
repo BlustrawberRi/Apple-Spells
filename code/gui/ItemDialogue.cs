@@ -119,9 +119,9 @@ public partial class ItemDialogue : MarginContainer
 
     private async void OnItemInteracted(Interactable item)
     {
-        Texture = item.ItemTexture;
-        Text = item.ItemDescription;
-        InteractableName = item.Name;
+        Texture = item.ItemInstance.Texture;
+        Text = item.ItemInstance.Description;
+        InteractableName = item.ItemInstance.DisplayName;
 
         await OpenDialogue();
 

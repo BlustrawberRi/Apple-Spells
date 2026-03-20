@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://dfy4uchdrnf82"]
+
+[ext_resource type="Texture2D" uid="uid://bfhsxal5di40v" path="res://assets/objects/2021-07 note text.png" id="1_oibx4"]
+[ext_resource type="Script" path="res://code/item interactions/ItemInstance.cs" id="2_ydban"]
+
+[resource]
+script = ExtResource("2_ydban")
+DisplayName = ""
+Texture = ExtResource("1_oibx4")
+Description = "I have a song stuck in my head.... I asked my friends if they knew it, but they didn't. It drives me crazy. If anyone knows this song, please tell me what it is.
+
+
+[wave amp=20.0 freq=1.0]When the sun goes down and the moonlight pours in my room
+Then the (line?) goes wild and there's nothing else I can do
+I just sit here and wait
+while I still contemplate
+all the things I have learned 
+how my brain becomes numb[/wave]"
+Components = Array[Object]([])

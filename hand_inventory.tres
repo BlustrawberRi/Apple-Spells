@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Inventory" load_steps=2 format=3 uid="uid://c4a53e12hqarv"]
+
+[ext_resource type="Script" path="res://code/Inventory.cs" id="1_n2p6p"]
+
+[resource]
+script = ExtResource("1_n2p6p")
+Capacity = 1
+Spaces = [Object(Object,"script":Resource("res://code/InventorySpace.cs"),"Item":null)
+]

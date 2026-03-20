@@ -24,5 +24,6 @@ public partial class HoldableComponent : ItemComponent
     public override void React(Interactable interactionSource, Interactable item)
     {
         EventBus.InteractableEvents.InvokeHoldableReacted(item/*, this*/);
+        item.Visible = false;
     }
 }

@@ -1,26 +1,33 @@
+using System.ComponentModel;
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.Xml;
-
-[GlobalClass]
+using Godot.Collections;
+[GlobalClass][Tool]
 public partial class Inventory : Resource
 {
-    [Export]
-    private Godot.Collections.Array<InventorySpace> Spaces;
+    [Export] public int Capacity = 0;
+    [Export] private Godot.Collections.Array<InventorySpace> Spaces = new();
 
-    [Export]
-    public int Capacity = 5;
     public int OccupiedSpaceCount;
     public int FreeSpaceCount => Capacity - OccupiedSpaceCount;
 
-    private Inventory()
+
+    public Inventory() : this(0) {  }
+    public Inventory (int capacity)
     {
-        Spaces = new Godot.Collections.Array<InventorySpace>();
+        Spaces = new Array<InventorySpace>();
         OccupiedSpaceCount = 0;
-        for (int i = 0; i < Capacity; i++)
+        for (int i = 0; i < capacity; i++)
             Spaces.Add(new());
         GD.Print("Made new Inventory with " + Capacity + " spaces.");
+    }
+
+    public override void _ValidateProperty(Dictionary property)
+    {
+        if (property["name"].AsStringName() == PropertyName.Capacity)
+        {
+            GD.Print("Change");
+            SetSize(Capacity);
+        }
     }
 
     public InventorySpace GetSpaceAt(int index)
@@ -35,18 +42,17 @@ public partial class Inventory : Resource
 
     public bool SetSize(int newSpaceCount)
     {
-        if (newSpaceCount == Capacity || newSpaceCount < 0) return true;
-        if (newSpaceCount > Capacity)
+        if (newSpaceCount == Spaces.Count || newSpaceCount < 0) return true;
+        if (newSpaceCount > Spaces.Count)
         {
-            for (int i = 0; i < newSpaceCount - Capacity; i++)
+            for (int i = 0; i < newSpaceCount - Spaces.Count; i++)
                 Spaces.Add(new());
 
-            Capacity = newSpaceCount;
             return true;
         }
-        if (newSpaceCount < Capacity && FreeSpaceCount >= Capacity - newSpaceCount)
+        if (newSpaceCount < Spaces.Count && FreeSpaceCount >= Spaces.Count - newSpaceCount)
         {
-            for (int i = Capacity - newSpaceCount - 1; i >= 0; i--)
+            for (int i = Spaces.Count - newSpaceCount - 1; i >= 0; i--)
             {
                 foreach (var space in Spaces)
                 {
@@ -57,7 +63,6 @@ public partial class Inventory : Resource
                     }
                 }
             }
-            Capacity = newSpaceCount;
             return true;
         }
         return false;
@@ -93,24 +98,5 @@ public partial class Inventory : Resource
     {
         // todo
         return false;
-    }
-}
-
-
-
-public partial class InventorySpace : GodotObject
-{
-    [Export]
-    public ItemInstance Item { private set; get; }
-
-    public int Amount = 0;
-    public event Action Changed;
-
-    public void Fill(Interactable item)
-    {
-        //todo: dont fill if full, to avoid errors
-        Item = item.ItemInstance;
-        Amount = 1;
-        Changed?.Invoke();
     }
 }

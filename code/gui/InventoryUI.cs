@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// The visual representation of the inventory.
+/// </summary>
 public partial class InventoryUI : Control
 {
     /// <summary>
@@ -29,17 +32,20 @@ public partial class InventoryUI : Control
     public override void _EnterTree()
     {
         base._EnterTree();
-        if (Inventory != null) 
+        if (Inventory != null)
             EventBus.InteractableEvents.HoldableReacted += AddInteractable;
     }
 
     public override void _ExitTree()
     {
         base._ExitTree();
-        if (Inventory != null) 
+        if (Inventory != null)
             EventBus.InteractableEvents.HoldableReacted -= AddInteractable;
     }
 
+    /// <summary>
+    /// Creates UISlots according to the amount of InventorySpaces the Inventory reference has.
+    /// </summary>
     private void BuildInventory()
     {
         if (Inventory == null)
@@ -59,8 +65,9 @@ public partial class InventoryUI : Control
         }
     }
 
-    private void AddInteractable (Interactable item) {
-
+    private void AddInteractable(Interactable item)
+    {
+        GD.Print("ABOUT TO ADD ITEM: "+item.Name+" !");
         if (!Inventory.AddItem(item))
         {
             GD.PrintErr("No space in inventory for " + item.Name);

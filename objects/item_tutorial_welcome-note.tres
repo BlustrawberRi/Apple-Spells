@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://dx48g5q0tvjx8"]
+
+[ext_resource type="Texture2D" uid="uid://cvf54lcfh4qy3" path="res://assets/objects/2021-07 note plant.png" id="1_txtpw"]
+[ext_resource type="Script" path="res://code/item interactions/ItemInstance.cs" id="2_twbgr"]
+
+[resource]
+script = ExtResource("2_twbgr")
+DisplayName = ""
+Texture = ExtResource("1_txtpw")
+Description = "You are playing the Godot Prototype of [wave]Apple Spells[/wave]!
+This is my very first time using Godot and I had fun learning all this new stuff in the last week. I hope you enjoy it, despite the lack of gameplay.
+
+I made sure the code is clean and good for future work, that where a lot of time went "
+Components = []

@@ -7,7 +7,7 @@ public partial class InventorySlotUI : Control
     private TextureRect itemTextureContainer;
     //private Interactable storedItem;
     [Export]
-    private InventorySpace inventorySpace = new();
+    private InventorySpace inventorySpace;
 
     public override void _Ready()
 	{
@@ -16,6 +16,11 @@ public partial class InventorySlotUI : Control
 
     internal void SetSpace(InventorySpace inventorySpace)
     {
+        if (inventorySpace == null)
+        {
+            GD.PrintErr("InventorySpace was null and cant create an Inventory Slot.");
+            return;
+        }
         this.inventorySpace = inventorySpace;
         inventorySpace.Changed += ChangeUI;
     }
@@ -25,6 +30,6 @@ public partial class InventorySlotUI : Control
 	/// </summary>
     private void ChangeUI()
     {
-        itemTextureContainer.Texture = inventorySpace.Item.ItemTexture;
+        itemTextureContainer.Texture = inventorySpace?.Item.Texture;
     }
 }

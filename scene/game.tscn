@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://co3rtrwgsx88k"]
+[gd_scene load_steps=34 format=3 uid="uid://co3rtrwgsx88k"]
 
 [ext_resource type="PackedScene" uid="uid://klq8mdlduuox" path="res://characters/Main Character.tscn" id="1_mb1y4"]
 [ext_resource type="Texture2D" uid="uid://4sgd6bhafbf4" path="res://assets/tilesets/2021-07 grass.png" id="1_qcqgu"]
@@ -13,10 +13,13 @@
 [ext_resource type="Texture2D" uid="uid://b0sgaejjcc344" path="res://assets/objects/2021-07 bed.png" id="9_6noq5"]
 [ext_resource type="Texture2D" uid="uid://c8a04geg0h3t6" path="res://assets/objects/2021-07 note person.png" id="9_v1ijy"]
 [ext_resource type="Texture2D" uid="uid://u3u1vlb8g746" path="res://assets/objects/2021-07 terracotta_pot small.png" id="10_8hiul"]
+[ext_resource type="Resource" uid="uid://dx48g5q0tvjx8" path="res://objects/item_tutorial_welcome-note.tres" id="11_7lnyh"]
 [ext_resource type="Texture2D" uid="uid://e1dmptmqw14x" path="res://assets/objects/2021-07 pouch.png" id="11_bceq8"]
-[ext_resource type="Texture2D" uid="uid://bvffriaa6bo2e" path="res://assets/objects/2021-07 watering_can small.png" id="12_6ptho"]
+[ext_resource type="Resource" uid="uid://bvaqhqgwmi6w6" path="res://objects/item_tutorial_change-log.tres" id="13_vxptl"]
+[ext_resource type="Resource" uid="uid://dfy4uchdrnf82" path="res://objects/item_tutorial_note-on-the-wall.tres" id="14_sq3e2"]
 [ext_resource type="PackedScene" uid="uid://dsm27n3vj1gny" path="res://objects/Plant.tscn" id="15_j3b6a"]
 [ext_resource type="Texture2D" uid="uid://dmq4g4xgltb7n" path="res://assets/objects/2021-07 window.png" id="16_7msvn"]
+[ext_resource type="Resource" uid="uid://bpvo7ipvx4ans" path="res://objects/item_tutorial_wateringcan.tres" id="16_vlrs7"]
 [ext_resource type="PackedScene" uid="uid://c15b1tb34x8p2" path="res://scene/gui.tscn" id="19_7grxd"]
 [ext_resource type="Texture2D" uid="uid://b6nga7jmyiwt0" path="res://assets/objects/2021-07 garden_shear small.png" id="20_6acik"]
 [ext_resource type="AudioStream" uid="uid://dtabmqumblu1p" path="res://assets/audio/main_title2.wav" id="20_lk7ij"]
@@ -524,7 +527,6 @@ shape = SubResource("SegmentShape2D_fb3t3")
 [node name="MC" parent="." instance=ExtResource("1_mb1y4")]
 z_index = 5
 position = Vector2(-1, -15)
-slideValue = 0.0
 
 [node name="SceneItemLoader" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -540,6 +542,7 @@ shape = SubResource("RectangleShape2D_giga3")
 
 [node name="Plant Note" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
 position = Vector2(-59, 54)
+ItemInstance = ExtResource("11_7lnyh")
 ItemTexture = ExtResource("8_cc0ej")
 ItemDescription = "You are playing the Godot Prototype of [wave]Apple Spells[/wave]!
 This is my very first time using Godot and I had fun learning all this new stuff in the last week. I hope you enjoy it, despite the lack of gameplay.
@@ -549,6 +552,7 @@ metadata/text = "What are you doing? \\nSomething the matter?? Longer text lonnn
 
 [node name="Note" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
 position = Vector2(459, -18)
+ItemInstance = ExtResource("13_vxptl")
 ItemTexture = ExtResource("9_v1ijy")
 ItemDescription = "         [u]Todo List[/u]
 [ul][s]make camera follow the player[/s]
@@ -566,6 +570,7 @@ create an actual game[/ul]"
 
 [node name="Note On the Wall" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
 position = Vector2(322, -44)
+ItemInstance = ExtResource("14_sq3e2")
 ItemDescription = "I have a song stuck in my head.... I asked my friends if they knew it, but they didn't. It drives me crazy. If anyone knows this song, please tell me what it is.
 
 
@@ -601,17 +606,7 @@ ItemDescription = "A mere pot"
 
 [node name="Watering Can" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
 position = Vector2(222, 60)
-ItemTexture = ExtResource("12_6ptho")
-ItemDescription = "At some point I should water the plants.
-
-
-
-If I had plants...
-
-
-
-
-... [fade length=44]And could pick up the watering can...[/fade]"
+ItemInstance = ExtResource("16_vlrs7")
 
 [node name="Item2" parent="SceneItemLoader" instance=ExtResource("7_5x76a")]
 position = Vector2(93, 22)

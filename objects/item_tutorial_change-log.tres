@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://bvaqhqgwmi6w6"]
+
+[ext_resource type="Texture2D" uid="uid://c8a04geg0h3t6" path="res://assets/objects/2021-07 note person.png" id="1_r40bl"]
+[ext_resource type="Script" path="res://code/item interactions/ItemInstance.cs" id="2_gst34"]
+
+[resource]
+script = ExtResource("2_gst34")
+DisplayName = ""
+Texture = ExtResource("1_r40bl")
+Description = "         [u]Todo List[/u]
+[ul][s]make camera follow the player[/s]
+[s]finding out how GUI works[/s]
+[s]create an item dialogue[/s]
+[s]use a theme file[/s]
+[s]create a object with collider in scene[/s]
+[s]read metadata from items[/s]
+[s]change text and icon in the dialogue to match item[/s]
+[s]scroll thru long text[/s]
+[s]fix issue where you see the last few lines again[/s]
+[s]animate text indicator[/s]
+[s]add music[/s]
+create an actual game[/ul]"
+Components = []
