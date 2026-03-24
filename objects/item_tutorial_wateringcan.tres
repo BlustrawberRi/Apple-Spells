@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemInstance" load_steps=5 format=3 uid="uid://bpvo7ipvx4ans"]
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=6 format=3 uid="uid://bpvo7ipvx4ans"]
 
 [ext_resource type="Script" path="res://code/item interactions/HoldableComponent.cs" id="1_by61u"]
 [ext_resource type="Texture2D" uid="uid://bvffriaa6bo2e" path="res://assets/objects/2021-07 watering_can small.png" id="2_yn78s"]
@@ -9,9 +9,12 @@ script = ExtResource("1_by61u")
 IsStackable = false
 MaxStackCount = 1
 
+[sub_resource type="InputEventAction" id="InputEventAction_fcl3x"]
+
 [resource]
 script = ExtResource("3_67el0")
 DisplayName = ""
 Texture = ExtResource("2_yn78s")
 Description = "????"
 Components = Array[Object]([SubResource("Resource_nuc5o")])
+ia = SubResource("InputEventAction_fcl3x")

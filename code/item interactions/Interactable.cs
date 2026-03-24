@@ -8,27 +8,9 @@ using System.ComponentModel;
 /// </summary>
 public partial class Interactable : StaticBody2D
 {
-	//[Export] public Texture2D Text;
 	[Export]
 	public ItemInstance ItemInstance;
 
-    [Export]
-	public Texture2D ItemTexture 
-	{
-		get
-		{
-			return _itemTexture;
-		}
-		set
-		{
-			_itemTexture = value;
-			if( TextureContainer != null)
-				TextureContainer.Texture = value;
-			//TextureContainer?.Set("texture", value);
-		}
-	}
-	[Export(PropertyHint.MultilineText)]
-	public String ItemDescription;
 	[Export]
 	public String HighlightAnimation = "interactable_highlight"; //todo: Global variable
 
@@ -36,24 +18,24 @@ public partial class Interactable : StaticBody2D
 	{
 		get 
 		{
-			return ItemTexture?.ResourcePath;
+			return ItemInstance?.Texture?.ResourcePath;
 		}
 	}
-	private Texture2D _itemTexture;
 
 	private Sprite2D TextureContainer;
 	private AnimationPlayer AnimationPlayer;
-	// public List<ItemComponent> Components {
-    //     get; private set;
-    // }
-
+	
 	public override void _Ready()
 	{
 		this.ProcessMode = ProcessModeEnum.Pausable;
 		// GetComponentsInChildren();
+		if (ItemInstance == null)
+        {
+			Disable();
+        }
 
 		TextureContainer = (Sprite2D)GetNode<Sprite2D>("Texture");
-		TextureContainer?.Set("texture", ItemInstance.Texture);
+		TextureContainer?.Set("texture", ItemInstance?.Texture);
 
 		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		//ItemTexture = ItemTexture; //initialize the set Texture
@@ -84,26 +66,12 @@ public partial class Interactable : StaticBody2D
         }
     }
 
-
-// todo: put this in the interaction Manager
-	public void Highlight(bool on) 
+	// todo: put this in the interaction Manager
+	public void Highlight(bool on)
 	{
-		if(on)		
+		if (on)
 			AnimationPlayer.Play(HighlightAnimation, -1, 2f);
 		else
-			AnimationPlayer.Play(AnimationPlayer.AssignedAnimation, -1, -2f, true);	
+			AnimationPlayer.Play(AnimationPlayer.AssignedAnimation, -1, -2f, true);
 	}
-	
-    // private void GetComponentsInChildren()
-    // {
-    //     Components = new();
-    //     foreach (var child in this.GetChildren())
-    //     {
-    //         var type = child.GetType();
-    //         if (child.GetType().IsSubclassOf(typeof(ItemComponent)))
-    //         {
-    //             Components.Add(child as ItemComponent);
-    //         }
-    //     }
-    // }
 }

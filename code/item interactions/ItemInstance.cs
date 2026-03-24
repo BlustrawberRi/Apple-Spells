@@ -34,4 +34,6 @@ public partial class ItemInstance : Resource
 	[Export]
 	public Array<ItemComponent> Components;
 
+	
+
 }

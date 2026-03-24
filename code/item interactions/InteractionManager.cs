@@ -72,7 +72,7 @@ public partial class InteractionManager : Area2D
 
     private void OnBodyEntered(Node2D body)
     {
-        if (body is not Interactable) return;
+        if (body is not Interactable ) return;
 
         InteractablesInRange.Add(body);
         bool changed = UpdateActiveInteractable();

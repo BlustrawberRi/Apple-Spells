@@ -54,7 +54,6 @@ process_mode = 1
 y_sort_enabled = true
 input_pickable = true
 script = ExtResource("1_4e038")
-ItemTexture = ExtResource("2_028wu")
 metadata/text = "Hello this is a note!"
 
 [node name="Texture" type="Sprite2D" parent="."]
